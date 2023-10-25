@@ -147,10 +147,10 @@ func doHandleError(w http.ResponseWriter, err error, handler func(error) (int, a
 		return
 	}
 
-	e, ok := body.(error)
-	if ok {
-		http.Error(w, e.Error(), code)
-	} else {
+	switch v := body.(type) {
+	case error:
+		http.Error(w, v.Error(), code)
+	default:
 		writeJson(w, code, body)
 	}
 }

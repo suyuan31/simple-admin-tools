@@ -46,7 +46,7 @@ type (
 		// DoWithAcceptable returns an error instantly if the Breaker rejects the request.
 		// If a panic occurs in the request, the Breaker handles it as an error
 		// and causes the same panic again.
-		// acceptable checks if it's a successful call, even if the err is not nil.
+		// acceptable checks if it's a successful call, even if the error is not nil.
 		DoWithAcceptable(req func() error, acceptable Acceptable) error
 
 		// DoWithFallback runs the given request if the Breaker accepts it.
@@ -59,7 +59,7 @@ type (
 		// DoWithFallbackAcceptable runs the fallback if the Breaker rejects the request.
 		// If a panic occurs in the request, the Breaker handles it as an error
 		// and causes the same panic again.
-		// acceptable checks if it's a successful call, even if the err is not nil.
+		// acceptable checks if it's a successful call, even if the error is not nil.
 		DoWithFallbackAcceptable(req func() error, fallback func(err error) error, acceptable Acceptable) error
 	}
 

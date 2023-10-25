@@ -2,6 +2,7 @@ package sqlx
 
 import (
 	"errors"
+
 	"github.com/go-sql-driver/mysql"
 )
 

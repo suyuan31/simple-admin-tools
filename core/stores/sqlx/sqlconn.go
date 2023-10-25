@@ -292,12 +292,13 @@ func (db *commonSqlConn) TransactCtx(ctx context.Context, fn func(context.Contex
 }
 
 func (db *commonSqlConn) acceptable(err error) bool {
-	if err == nil || errors.Is(err, sql.ErrNoRows) || errors.Is(err, sql.ErrTxDone) || errors.Is(err, context.Canceled) {
+	if err == nil || errors.Is(err, sql.ErrNoRows) || errors.Is(err, sql.ErrTxDone) ||
+		errors.Is(err, context.Canceled) {
 		return true
 	}
 
-	var acceptableError acceptableError
-	if errors.As(err, &acceptableError) {
+	var e acceptableError
+	if errors.As(err, &e) {
 		return true
 	}
 
