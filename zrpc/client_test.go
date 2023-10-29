@@ -245,3 +245,9 @@ func TestNewClientWithTarget(t *testing.T) {
 
 	assert.NotNil(t, err)
 }
+
+func TestNewClientIfEnable(t *testing.T) {
+	conf := RpcClientConf{Enabled: false}
+	cli := NewClientIfEnable(conf)
+	assert.Nil(t, cli)
+}
