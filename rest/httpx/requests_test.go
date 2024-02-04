@@ -318,7 +318,7 @@ func TestParseWithFloatPtr(t *testing.T) {
 		r := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(body))
 		r.Header.Set(ContentType, header.JsonContentType)
 
-		if assert.NoError(t, Parse(r, &v)) {
+		if assert.NoError(t, Parse(r, &v, false)) {
 			assert.Equal(t, float32(3.2), *v.WeightFloat32)
 		}
 	})
@@ -330,7 +330,7 @@ func TestParseWithEscapedParams(t *testing.T) {
 			Dev string `form:"dev"`
 		}
 		r := httptest.NewRequest(http.MethodGet, "http://127.0.0.1/api/v2/dev/test?dev=se205%5fy1205%5fj109%26verRelease=v01%26iid1=863494061186673%26iid2=863494061186681%26mcc=636%26mnc=1", http.NoBody)
-		if assert.NoError(t, Parse(r, &v)) {
+		if assert.NoError(t, Parse(r, &v, false)) {
 			assert.Equal(t, "se205_y1205_j109&verRelease=v01&iid1=863494061186673&iid2=863494061186681&mcc=636&mnc=1", v.Dev)
 		}
 	})
