@@ -44,7 +44,7 @@ type (
 		StrictControl bool               `json:",optional"`
 		// setting 0 means no timeout
 		Timeout      int64 `json:",default=2000,env=RPC_TIMEOUT"`
-		CpuThreshold int64 `json:",default=900,range=[0:1000]"`
+		CpuThreshold int64 `json:",default=900,range=[0:1000)"`
 		// grpc health check switch
 		Health      bool `json:",default=true"`
 		Middlewares ServerMiddlewaresConf

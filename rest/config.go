@@ -6,8 +6,6 @@ import (
 	"github.com/zeromicro/go-zero/core/service"
 )
 
-//@enhance
-
 type (
 	// MiddlewaresConf is the config of middlewares.
 	MiddlewaresConf struct {
@@ -61,7 +59,7 @@ type (
 		MaxBytes int64  `json:",default=1048576"`
 		// milliseconds
 		Timeout      int64         `json:",default=3000,env=API_TIMEOUT"`
-		CpuThreshold int64         `json:",default=900,range=[0:1000]"`
+		CpuThreshold int64         `json:",default=900,range=[0:1000)"`
 		Signature    SignatureConf `json:",optional"`
 		// There are default values for all the items in Middlewares.
 		Middlewares MiddlewaresConf
