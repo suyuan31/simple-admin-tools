@@ -1,6 +1,7 @@
 package redistest
 
 import (
+	"log"
 	"testing"
 
 	"github.com/alicebob/miniredis/v2"
@@ -16,5 +17,9 @@ func CreateRedis(t *testing.T) *redis.Redis {
 // CreateRedisWithClean returns an in process redis.Redis and a clean function.
 func CreateRedisWithClean(t *testing.T) (r *redis.Redis, clean func()) {
 	mr := miniredis.RunT(t)
-	return redis.New(mr.Addr()), mr.Close
+	r, err := redis.NewRedis(redis.RedisConf{Host: mr.Addr()})
+	if err != nil {
+		log.Fatal(err)
+	}
+	return r, mr.Close
 }
