@@ -14,18 +14,37 @@ import (
 )
 
 func TestParseForm(t *testing.T) {
-	var v struct {
-		Name    string  `form:"name"`
-		Age     int     `form:"age"`
-		Percent float64 `form:"percent,optional"`
-	}
+	t.Run("slice", func(t *testing.T) {
+		var v struct {
+			Name    string  `form:"name"`
+			Age     int     `form:"age"`
+			Percent float64 `form:"percent,optional"`
+		}
 
-	r, err := http.NewRequest(http.MethodGet, "/a?name=hello&age=18&percent=3.4", http.NoBody)
-	assert.Nil(t, err)
-	assert.Nil(t, Parse(r, &v, false))
-	assert.Equal(t, "hello", v.Name)
-	assert.Equal(t, 18, v.Age)
-	assert.Equal(t, 3.4, v.Percent)
+		r, err := http.NewRequest(
+			http.MethodGet,
+			"/a?name=hello&age=18&percent=3.4",
+			http.NoBody)
+		assert.Nil(t, err)
+		assert.Nil(t, Parse(r, &v, false))
+		assert.Equal(t, "hello", v.Name)
+		assert.Equal(t, 18, v.Age)
+		assert.Equal(t, 3.4, v.Percent)
+	})
+
+	t.Run("no value", func(t *testing.T) {
+		var v struct {
+			NoValue string `form:"noValue,optional"`
+		}
+
+		r, err := http.NewRequest(
+			http.MethodGet,
+			"/a?name=hello&age=18&percent=3.4&statuses=try&statuses=done&singleValue=one",
+			http.NoBody)
+		assert.Nil(t, err)
+		assert.Nil(t, Parse(r, &v, false))
+		assert.Equal(t, 0, len(v.NoValue))
+	})
 }
 
 func TestParseForm_Error(t *testing.T) {
@@ -208,9 +227,23 @@ func TestParseJsonBody(t *testing.T) {
 		r := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(body))
 		r.Header.Set(ContentType, header.JsonContentType)
 
-		assert.Nil(t, Parse(r, &v, false))
-		assert.Equal(t, "kevin", v.Name)
-		assert.Equal(t, 18, v.Age)
+		if assert.NoError(t, Parse(r, &v, false)) {
+			assert.Equal(t, "kevin", v.Name)
+			assert.Equal(t, 18, v.Age)
+		}
+	})
+
+	t.Run("bad body", func(t *testing.T) {
+		var v struct {
+			Name string `json:"name"`
+			Age  int    `json:"age"`
+		}
+
+		body := `{"name":"kevin", "ag": 18}`
+		r := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(body))
+		r.Header.Set(ContentType, header.JsonContentType)
+
+		assert.Error(t, Parse(r, &v, false))
 	})
 
 	t.Run("hasn't body", func(t *testing.T) {
@@ -307,6 +340,33 @@ func TestParseHeaders_Error(t *testing.T) {
 	r := httptest.NewRequest("POST", "/", http.NoBody)
 	r.Header.Set("name", "foo")
 	assert.NotNil(t, Parse(r, &v, false))
+}
+
+func TestParseFormWithDot(t *testing.T) {
+	var v struct {
+		Age int `form:"user.age"`
+	}
+	r, err := http.NewRequest(http.MethodGet, "/a?user.age=18", http.NoBody)
+	assert.Nil(t, err)
+	assert.NoError(t, Parse(r, &v, false))
+	assert.Equal(t, 18, v.Age)
+}
+
+func TestParsePathWithDot(t *testing.T) {
+	var v struct {
+		Name string `path:"name.val"`
+		Age  int    `path:"age.val"`
+	}
+
+	r := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
+	r = pathvar.WithVars(r, map[string]string{
+		"name.val": "foo",
+		"age.val":  "18",
+	})
+	err := Parse(r, &v, false)
+	assert.Nil(t, err)
+	assert.Equal(t, "foo", v.Name)
+	assert.Equal(t, 18, v.Age)
 }
 
 func TestParseWithFloatPtr(t *testing.T) {

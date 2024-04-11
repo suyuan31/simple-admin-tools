@@ -17,8 +17,8 @@ import (
 
 var once sync.Once
 
-// Server is inner http server, expose some useful observability information of app.
-// For example health check, metrics and pprof.
+// Server is an inner http server, expose some useful observability information of app.
+// For example, health check, metrics and pprof.
 type Server struct {
 	config Config
 	server *http.ServeMux
@@ -33,13 +33,14 @@ func NewServer(config Config) *Server {
 	}
 }
 
-func (s *Server) addRoutes() {
+func (s *Server) addRoutes(c Config) {
 	// route path, routes list
 	s.handleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		_ = json.NewEncoder(w).Encode(s.routes)
 	})
+
 	// health
-	s.handleFunc(s.config.HealthPath, health.CreateHttpHandler())
+	s.handleFunc(s.config.HealthPath, health.CreateHttpHandler(c.HealthResponse))
 
 	// metrics
 	if s.config.EnableMetrics {
@@ -47,6 +48,7 @@ func (s *Server) addRoutes() {
 		prometheus.Enable()
 		s.handleFunc(s.config.MetricsPath, promhttp.Handler().ServeHTTP)
 	}
+
 	// pprof
 	if s.config.EnablePprof {
 		s.handleFunc("/debug/pprof/", pprof.Index)
@@ -63,8 +65,8 @@ func (s *Server) handleFunc(pattern string, handler http.HandlerFunc) {
 }
 
 // StartAsync start inner http server background.
-func (s *Server) StartAsync() {
-	s.addRoutes()
+func (s *Server) StartAsync(c Config) {
+	s.addRoutes(c)
 	threading.GoSafe(func() {
 		addr := fmt.Sprintf("%s:%d", s.config.Host, s.config.Port)
 		logx.Infof("Starting dev http server at %s", addr)
@@ -79,7 +81,7 @@ func StartAgent(c Config) {
 	once.Do(func() {
 		if c.Enabled {
 			s := NewServer(c)
-			s.StartAsync()
+			s.StartAsync(c)
 		}
 	})
 }

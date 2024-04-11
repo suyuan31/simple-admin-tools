@@ -28,7 +28,7 @@ func GetFormValues(r *http.Request) (map[string]any, error) {
 	}
 
 	if err := r.ParseMultipartForm(maxMemory); err != nil {
-		if err != http.ErrNotMultipart {
+		if !errors.Is(err, http.ErrNotMultipart) {
 			return nil, err
 		}
 	}
