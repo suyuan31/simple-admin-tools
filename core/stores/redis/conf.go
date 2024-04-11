@@ -17,10 +17,10 @@ var (
 type (
 	// A RedisConf is a redis config.
 	RedisConf struct {
-		Host     string
-		Type     string `json:",default=node,options=node|cluster"`
-		Pass     string `json:",optional"`
-		Tls      bool   `json:",optional"`
+		Host     string `json:",env=REDIS_HOST"`
+		Type     string `json:",default=node,options=node|cluster,env=REDIS_TYPE"`
+		Pass     string `json:",optional,env=REDIS_PASSWORD"`
+		Tls      bool   `json:",optional,env=REDIS_TLS"`
 		NonBlock bool   `json:",default=true"`
 		// PingTimeout is the timeout for ping redis.
 		PingTimeout time.Duration `json:",default=1s"`
