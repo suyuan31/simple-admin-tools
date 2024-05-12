@@ -1,8 +1,11 @@
 package httpx
 
 import (
+	"bytes"
+	"errors"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
@@ -396,6 +399,17 @@ func TestParseWithEscapedParams(t *testing.T) {
 	})
 }
 
+func TestCustomUnmarshalerStructRequest(t *testing.T) {
+	reqBody := `{"name": "hello"}`
+	r := httptest.NewRequest(http.MethodPost, "/a", bytes.NewReader([]byte(reqBody)))
+	r.Header.Set(ContentType, JsonContentType)
+	v := struct {
+		Foo *mockUnmarshaler `json:"name"`
+	}{}
+	assert.Nil(t, Parse(r, &v, false))
+	assert.Equal(t, "hello", v.Foo.Name)
+}
+
 func BenchmarkParseRaw(b *testing.B) {
 	r, err := http.NewRequest(http.MethodGet, "http://hello.com/a?name=hello&age=18&percent=3.4", http.NoBody)
 	if err != nil {
@@ -438,4 +452,44 @@ func BenchmarkParseAuto(b *testing.B) {
 			b.Fatal(err)
 		}
 	}
+}
+
+type mockValidator struct {
+	nop bool
+}
+
+func (m mockValidator) Validate(r *http.Request, data any) error {
+	if m.nop {
+		return nil
+	}
+
+	if r.URL.Path == "/a" {
+		val := reflect.ValueOf(data).Elem().FieldByName("Name").String()
+		if val != "hello" {
+			return errors.New("name is not hello")
+		}
+	}
+
+	return nil
+}
+
+type mockRequest struct {
+	Name string `json:"name,optional"`
+}
+
+func (m mockRequest) Validate() error {
+	if m.Name != "hello" {
+		return errors.New("name is not hello")
+	}
+
+	return nil
+}
+
+type mockUnmarshaler struct {
+	Name string
+}
+
+func (m *mockUnmarshaler) UnmarshalJSON(b []byte) error {
+	m.Name = string(b)
+	return nil
 }
