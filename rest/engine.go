@@ -169,7 +169,7 @@ func (ng *engine) buildChainWithNativeMiddlewares(fr featuredRoutes, route Route
 		chn = chn.Append(handler.I18nHandler)
 	}
 	if ng.conf.Middlewares.Tenant {
-		chn = chn.Append(handler.I18nHandler)
+		chn = chn.Append(handler.TenantHandler)
 	}
 
 	return chn
