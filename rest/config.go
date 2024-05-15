@@ -20,6 +20,8 @@ type (
 		Metrics    bool `json:",default=true"`
 		MaxBytes   bool `json:",default=true"`
 		Gunzip     bool `json:",default=true"`
+		I18n       bool `json:",default=true"`
+		Tenant     bool `json:",default=false"`
 	}
 
 	// A PrivateKeyConf is a private key config.

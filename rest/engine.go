@@ -165,8 +165,12 @@ func (ng *engine) buildChainWithNativeMiddlewares(fr featuredRoutes, route Route
 	if ng.conf.Middlewares.Gunzip {
 		chn = chn.Append(handler.GunzipHandler)
 	}
-
-	chn = chn.Append(handler.I18nHandler)
+	if ng.conf.Middlewares.I18n {
+		chn = chn.Append(handler.I18nHandler)
+	}
+	if ng.conf.Middlewares.Tenant {
+		chn = chn.Append(handler.I18nHandler)
+	}
 
 	return chn
 }
