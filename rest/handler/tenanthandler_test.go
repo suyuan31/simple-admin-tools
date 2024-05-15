@@ -11,11 +11,11 @@ import (
 
 func TestTenantHandler(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "http://localhost", http.NoBody)
-	req.Header.Set("Tenant-ID", "tenant-1")
+	req.Header.Set("Tenant-Id", "tenant-1")
 	handler := TenantHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add tenant to context
-		if tenantId := r.Header.Get("Tenant-ID"); tenantId == "" {
+		if tenantId := r.Header.Get("Tenant-Id"); tenantId == "" {
 			ctx = context.WithValue(ctx, "tenant-id", "default")
 			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", "default")
 		} else {
@@ -36,7 +36,7 @@ func TestTenantHandlerByDefault(t *testing.T) {
 	handler := TenantHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add tenant to context
-		if tenantId := r.Header.Get("Tenant-ID"); tenantId == "" {
+		if tenantId := r.Header.Get("Tenant-Id"); tenantId == "" {
 			ctx = context.WithValue(ctx, "tenant-id", "default")
 			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", "default")
 		} else {

@@ -11,7 +11,7 @@ func TenantHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add tenant to context
-		if tenantId := r.Header.Get("Tenant-ID"); tenantId == "" {
+		if tenantId := r.Header.Get("Tenant-Id"); tenantId == "" {
 			ctx = context.WithValue(ctx, "tenant-id", "default")
 			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", "default")
 		} else {
