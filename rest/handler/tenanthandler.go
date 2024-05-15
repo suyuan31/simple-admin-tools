@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"google.golang.org/grpc/metadata"
 	"net/http"
 )
 
@@ -10,7 +11,13 @@ func TenantHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add tenant to context
-		ctx = context.WithValue(ctx, "tenantId", r.Header.Get("Tenant-ID"))
+		if tenantId := r.Header.Get("Tenant-ID"); tenantId == "" {
+			ctx = context.WithValue(ctx, "tenant-id", "default")
+			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", "default")
+		} else {
+			ctx = context.WithValue(ctx, "tenant-id", tenantId)
+			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", tenantId)
+		}
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
