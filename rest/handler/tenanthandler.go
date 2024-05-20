@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/rest/enum"
 	"google.golang.org/grpc/metadata"
 	"net/http"
 )
@@ -11,12 +12,12 @@ func TenantHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add tenant to context
-		if tenantId := r.Header.Get("Tenant-Id"); tenantId == "" {
-			ctx = context.WithValue(ctx, "tenant-id", "default")
-			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", "default")
+		if tenantId := r.Header.Get(enum.TENANT_ID_HEADER_KEY); tenantId == "" {
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "default")
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "default")
 		} else {
-			ctx = context.WithValue(ctx, "tenant-id", tenantId)
-			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", tenantId)
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
 		}
 
 		next.ServeHTTP(w, r.WithContext(ctx))

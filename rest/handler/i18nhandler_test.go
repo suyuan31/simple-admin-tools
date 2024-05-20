@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
+	"github.com/zeromicro/go-zero/rest/enum"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,12 +16,12 @@ func TestI18nHandler(t *testing.T) {
 		ctx := r.Context()
 		// add lang to context
 		if lang := r.Header.Get("Accept-Language"); lang == "" {
-			ctx = context.WithValue(ctx, "lang", "zh-CN")
+			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, "zh-CN")
 		} else {
-			ctx = context.WithValue(ctx, "lang", lang)
+			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, lang)
 		}
 
-		assert.Equal(t, "zh-CN", ctx.Value("lang").(string))
+		assert.Equal(t, "zh-CN", ctx.Value(enum.I18N_CTX_KEY).(string))
 	}))
 
 	resp := httptest.NewRecorder()
@@ -34,12 +35,12 @@ func TestI18nHandlerNoHeader(t *testing.T) {
 		ctx := r.Context()
 		// add lang to context
 		if lang := r.Header.Get("Accept-Language"); lang == "" {
-			ctx = context.WithValue(ctx, "lang", "zh-CN")
+			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, "zh-CN")
 		} else {
-			ctx = context.WithValue(ctx, "lang", lang)
+			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, lang)
 		}
 
-		assert.Equal(t, "zh-CN", ctx.Value("lang").(string))
+		assert.Equal(t, "zh-CN", ctx.Value(enum.I18N_CTX_KEY).(string))
 	}))
 
 	resp := httptest.NewRecorder()

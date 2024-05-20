@@ -22,6 +22,7 @@ type (
 		Gunzip     bool `json:",default=true"`
 		I18n       bool `json:",default=true"`
 		Tenant     bool `json:",default=false"`
+		ClientIp   bool `json:",default=false"`
 	}
 
 	// A PrivateKeyConf is a private key config.

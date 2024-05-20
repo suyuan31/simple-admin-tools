@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
+	"github.com/zeromicro/go-zero/rest/enum"
 	"google.golang.org/grpc/metadata"
 	"net/http"
 	"net/http/httptest"
@@ -15,15 +16,15 @@ func TestTenantHandler(t *testing.T) {
 	handler := TenantHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add tenant to context
-		if tenantId := r.Header.Get("Tenant-Id"); tenantId == "" {
-			ctx = context.WithValue(ctx, "tenant-id", "default")
-			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", "default")
+		if tenantId := r.Header.Get(enum.TENANT_ID_HEADER_KEY); tenantId == "" {
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "default")
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "default")
 		} else {
-			ctx = context.WithValue(ctx, "tenant-id", tenantId)
-			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", tenantId)
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
 		}
 
-		assert.Equal(t, "tenant-1", ctx.Value("tenant-id").(string))
+		assert.Equal(t, "tenant-1", ctx.Value(enum.TENANT_ID_CTX_KEY).(string))
 	}))
 
 	resp := httptest.NewRecorder()
@@ -36,15 +37,15 @@ func TestTenantHandlerByDefault(t *testing.T) {
 	handler := TenantHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add tenant to context
-		if tenantId := r.Header.Get("Tenant-Id"); tenantId == "" {
-			ctx = context.WithValue(ctx, "tenant-id", "default")
-			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", "default")
+		if tenantId := r.Header.Get(enum.TENANT_ID_HEADER_KEY); tenantId == "" {
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "default")
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "default")
 		} else {
-			ctx = context.WithValue(ctx, "tenant-id", tenantId)
-			ctx = metadata.AppendToOutgoingContext(ctx, "tenant-id", tenantId)
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
 		}
 
-		assert.Equal(t, "default", ctx.Value("tenant-id").(string))
+		assert.Equal(t, "default", ctx.Value(enum.TENANT_ID_CTX_KEY).(string))
 	}))
 
 	resp := httptest.NewRecorder()
