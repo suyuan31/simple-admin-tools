@@ -13,8 +13,8 @@ func TenantHandler(next http.Handler) http.Handler {
 		ctx := r.Context()
 		// add tenant to context
 		if tenantId := r.Header.Get(enum.TENANT_ID_HEADER_KEY); tenantId == "" {
-			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "default")
-			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "default")
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "0")
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "0")
 		} else {
 			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
 			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
