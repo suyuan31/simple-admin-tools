@@ -17,8 +17,8 @@ func TestTenantHandler(t *testing.T) {
 		ctx := r.Context()
 		// add tenant to context
 		if tenantId := r.Header.Get(enum.TENANT_ID_HEADER_KEY); tenantId == "" {
-			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "default")
-			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "default")
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "1")
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "1")
 		} else {
 			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
 			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
@@ -38,14 +38,14 @@ func TestTenantHandlerByDefault(t *testing.T) {
 		ctx := r.Context()
 		// add tenant to context
 		if tenantId := r.Header.Get(enum.TENANT_ID_HEADER_KEY); tenantId == "" {
-			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "default")
-			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "default")
+			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, "1")
+			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, "1")
 		} else {
 			ctx = context.WithValue(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
 			ctx = metadata.AppendToOutgoingContext(ctx, enum.TENANT_ID_CTX_KEY, tenantId)
 		}
 
-		assert.Equal(t, "default", ctx.Value(enum.TENANT_ID_CTX_KEY).(string))
+		assert.Equal(t, "1", ctx.Value(enum.TENANT_ID_CTX_KEY).(string))
 	}))
 
 	resp := httptest.NewRecorder()
