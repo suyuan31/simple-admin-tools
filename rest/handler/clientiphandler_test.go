@@ -9,13 +9,13 @@ import (
 	"testing"
 )
 
-func TestClientIpHandler(t *testing.T) {
+func TestClientIPHandler(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "http://localhost", http.NoBody)
 	req.Header.Set("X-Real-IP", "192.168.100.100")
 	handler := TenantHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add client ip to context
-		ip, err := GetClientIp(r)
+		ip, err := GetClientIP(r)
 		if err != nil {
 			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, "")
 		} else {

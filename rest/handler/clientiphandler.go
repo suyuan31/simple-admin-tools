@@ -9,12 +9,12 @@ import (
 	"strings"
 )
 
-// ClientIpHandler returns a middleware that inject client ip into context
-func ClientIpHandler(next http.Handler) http.Handler {
+// ClientIPHandler returns a middleware that inject client ip into context
+func ClientIPHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		// add client ip to context
-		ip, err := GetClientIp(r)
+		ip, err := GetClientIP(r)
 		if err != nil {
 			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, "")
 		} else {
@@ -25,8 +25,8 @@ func ClientIpHandler(next http.Handler) http.Handler {
 	})
 }
 
-// GetClientIp returns client's real ip address.
-func GetClientIp(r *http.Request) (string, error) {
+// GetClientIP returns client's real ip address.
+func GetClientIP(r *http.Request) (string, error) {
 	ip := r.Header.Get("X-Real-IP")
 	if net.ParseIP(ip) != nil {
 		return ip, nil
