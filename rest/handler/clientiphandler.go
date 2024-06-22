@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/enum"
 	"net"
 	"net/http"
@@ -16,6 +17,7 @@ func ClientIPHandler(next http.Handler) http.Handler {
 		// add client ip to context
 		ip, err := GetClientIP(r)
 		if err != nil {
+			logx.Error(err, logx.Field("header", r.Header))
 			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, "")
 		} else {
 			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, ip)
