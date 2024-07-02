@@ -2,7 +2,10 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"github.com/zeromicro/go-zero/rest/enum"
+	"google.golang.org/grpc/metadata"
 	"net/http"
 	"net/http/httputil"
 
@@ -14,14 +17,16 @@ import (
 )
 
 const (
-	jwtAudience    = "aud"
-	jwtExpire      = "exp"
-	jwtId          = "jti"
-	jwtIssueAt     = "iat"
-	jwtIssuer      = "iss"
-	jwtNotBefore   = "nbf"
-	jwtSubject     = "sub"
-	noDetailReason = "no detail reason"
+	jwtAudience     = "aud"
+	jwtExpire       = "exp"
+	jwtId           = "jti"
+	jwtIssueAt      = "iat"
+	jwtIssuer       = "iss"
+	jwtNotBefore    = "nbf"
+	jwtSubject      = "sub"
+	jwtDepartmentId = "deptId"
+	jwtUserId       = "userId"
+	noDetailReason  = "no detail reason"
 )
 
 var (
@@ -73,7 +78,13 @@ func Authorize(secret string, opts ...AuthorizeOption) func(http.Handler) http.H
 			for k, v := range claims {
 				switch k {
 				case jwtAudience, jwtExpire, jwtId, jwtIssueAt, jwtIssuer, jwtNotBefore, jwtSubject:
-					// ignore the standard claims
+				// ignore the standard claims
+				case jwtUserId:
+					ctx = metadata.AppendToOutgoingContext(ctx, enum.USER_ID_RPC_CTX_KEY, v.(string))
+					ctx = context.WithValue(ctx, k, v)
+				case jwtDepartmentId:
+					ctx = metadata.AppendToOutgoingContext(ctx, enum.DEPARTMENT_ID_RPC_CTX_KEY, v.(json.Number).String())
+					ctx = context.WithValue(ctx, k, v)
 				default:
 					ctx = context.WithValue(ctx, k, v)
 				}
