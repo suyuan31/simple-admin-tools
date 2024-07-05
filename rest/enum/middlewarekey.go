@@ -20,4 +20,7 @@ const (
 
 	// UserIdRpcCtxKey is user's ID key in rpc context
 	UserIdRpcCtxKey = "user-id"
+
+	// RoleIdRpcCtxKey is role's ID key in rpc context
+	RoleIdRpcCtxKey = "role-id"
 )

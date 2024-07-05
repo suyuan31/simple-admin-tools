@@ -26,6 +26,7 @@ const (
 	jwtSubject      = "sub"
 	jwtDepartmentId = "deptId"
 	jwtUserId       = "userId"
+	jwtRoleId       = "roleId"
 	noDetailReason  = "no detail reason"
 )
 
@@ -81,6 +82,9 @@ func Authorize(secret string, opts ...AuthorizeOption) func(http.Handler) http.H
 				// ignore the standard claims
 				case jwtUserId:
 					ctx = metadata.AppendToOutgoingContext(ctx, enum.UserIdRpcCtxKey, v.(string))
+					ctx = context.WithValue(ctx, k, v)
+				case jwtRoleId:
+					ctx = metadata.AppendToOutgoingContext(ctx, enum.RoleIdRpcCtxKey, v.(string))
 					ctx = context.WithValue(ctx, k, v)
 				case jwtDepartmentId:
 					ctx = metadata.AppendToOutgoingContext(ctx, enum.DepartmentIdRpcCtxKey, v.(json.Number).String())
