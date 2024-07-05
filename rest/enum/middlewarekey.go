@@ -3,21 +3,21 @@ package enum
 /*** Middleware Keys ***/
 
 const (
-	// TENANT_ID_HEADER_KEY is tenant's ID key in header
-	TENANT_ID_HEADER_KEY = "Tenant-Id"
+	// TenantIdHeaderKey is tenant's ID key in header
+	TenantIdHeaderKey = "Tenant-Id"
 
-	// TENANT_ID_CTX_KEY is tenant's ID key in context
-	TENANT_ID_CTX_KEY = "tenant-id"
+	// TenantIdCtxKey is tenant's ID key in context
+	TenantIdCtxKey = "tenant-id"
 
-	// CLIENT_IP_CTX_KEY is client's IP key in context
-	CLIENT_IP_CTX_KEY = "client-ip"
+	// ClientIPCtxKey is client's IP key in context
+	ClientIPCtxKey = "client-ip"
 
-	// I18N_CTX_KEY is the i18n language key in context
-	I18N_CTX_KEY = "lang"
+	// I18nCtxKey is the i18n language key in context
+	I18nCtxKey = "lang"
 
-	// DEPARTMENT_ID_RPC_CTX_KEY is department's ID key in rpc context
-	DEPARTMENT_ID_RPC_CTX_KEY = "dept-id"
+	// DepartmentIdRpcCtxKey is department's ID key in rpc context
+	DepartmentIdRpcCtxKey = "dept-id"
 
-	// USER_ID_RPC_CTX_KEY is user's ID key in rpc context
-	USER_ID_RPC_CTX_KEY = "user-id"
+	// UserIdRpcCtxKey is user's ID key in rpc context
+	UserIdRpcCtxKey = "user-id"
 )

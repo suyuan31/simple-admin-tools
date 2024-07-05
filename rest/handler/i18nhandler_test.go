@@ -16,12 +16,12 @@ func TestI18nHandler(t *testing.T) {
 		ctx := r.Context()
 		// add lang to context
 		if lang := r.Header.Get("Accept-Language"); lang == "" {
-			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, "zh-CN")
+			ctx = context.WithValue(ctx, enum.I18nCtxKey, "zh-CN")
 		} else {
-			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, lang)
+			ctx = context.WithValue(ctx, enum.I18nCtxKey, lang)
 		}
 
-		assert.Equal(t, "zh-CN", ctx.Value(enum.I18N_CTX_KEY).(string))
+		assert.Equal(t, "zh-CN", ctx.Value(enum.I18nCtxKey).(string))
 	}))
 
 	resp := httptest.NewRecorder()
@@ -35,12 +35,12 @@ func TestI18nHandlerNoHeader(t *testing.T) {
 		ctx := r.Context()
 		// add lang to context
 		if lang := r.Header.Get("Accept-Language"); lang == "" {
-			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, "zh-CN")
+			ctx = context.WithValue(ctx, enum.I18nCtxKey, "zh-CN")
 		} else {
-			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, lang)
+			ctx = context.WithValue(ctx, enum.I18nCtxKey, lang)
 		}
 
-		assert.Equal(t, "zh-CN", ctx.Value(enum.I18N_CTX_KEY).(string))
+		assert.Equal(t, "zh-CN", ctx.Value(enum.I18nCtxKey).(string))
 	}))
 
 	resp := httptest.NewRecorder()

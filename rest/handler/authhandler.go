@@ -80,10 +80,10 @@ func Authorize(secret string, opts ...AuthorizeOption) func(http.Handler) http.H
 				case jwtAudience, jwtExpire, jwtId, jwtIssueAt, jwtIssuer, jwtNotBefore, jwtSubject:
 				// ignore the standard claims
 				case jwtUserId:
-					ctx = metadata.AppendToOutgoingContext(ctx, enum.USER_ID_RPC_CTX_KEY, v.(string))
+					ctx = metadata.AppendToOutgoingContext(ctx, enum.UserIdRpcCtxKey, v.(string))
 					ctx = context.WithValue(ctx, k, v)
 				case jwtDepartmentId:
-					ctx = metadata.AppendToOutgoingContext(ctx, enum.DEPARTMENT_ID_RPC_CTX_KEY, v.(json.Number).String())
+					ctx = metadata.AppendToOutgoingContext(ctx, enum.DepartmentIdRpcCtxKey, v.(json.Number).String())
 					ctx = context.WithValue(ctx, k, v)
 				default:
 					ctx = context.WithValue(ctx, k, v)

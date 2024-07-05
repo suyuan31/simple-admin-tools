@@ -18,9 +18,9 @@ func ClientIPHandler(next http.Handler) http.Handler {
 		ip, err := GetClientIP(r)
 		if err != nil {
 			logx.Error(err, logx.Field("header", r.Header))
-			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, "")
+			ctx = context.WithValue(ctx, enum.ClientIPCtxKey, "")
 		} else {
-			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, ip)
+			ctx = context.WithValue(ctx, enum.ClientIPCtxKey, ip)
 		}
 
 		next.ServeHTTP(w, r.WithContext(ctx))

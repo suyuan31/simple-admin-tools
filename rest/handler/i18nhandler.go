@@ -12,9 +12,9 @@ func I18nHandler(next http.Handler) http.Handler {
 		ctx := r.Context()
 		// add lang to context
 		if lang := r.Header.Get("Accept-Language"); lang == "" {
-			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, "zh-CN")
+			ctx = context.WithValue(ctx, enum.I18nCtxKey, "zh-CN")
 		} else {
-			ctx = context.WithValue(ctx, enum.I18N_CTX_KEY, lang)
+			ctx = context.WithValue(ctx, enum.I18nCtxKey, lang)
 		}
 
 		next.ServeHTTP(w, r.WithContext(ctx))

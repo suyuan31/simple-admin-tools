@@ -17,12 +17,12 @@ func TestClientIPHandler(t *testing.T) {
 		// add client ip to context
 		ip, err := GetClientIP(r)
 		if err != nil {
-			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, "")
+			ctx = context.WithValue(ctx, enum.ClientIPCtxKey, "")
 		} else {
-			ctx = context.WithValue(ctx, enum.CLIENT_IP_CTX_KEY, ip)
+			ctx = context.WithValue(ctx, enum.ClientIPCtxKey, ip)
 		}
 
-		assert.Equal(t, "192.168.100.100", ctx.Value(enum.CLIENT_IP_CTX_KEY).(string))
+		assert.Equal(t, "192.168.100.100", ctx.Value(enum.ClientIPCtxKey).(string))
 	}))
 
 	resp := httptest.NewRecorder()
