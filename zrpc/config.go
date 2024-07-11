@@ -21,7 +21,7 @@ type (
 	// A RpcClientConf is a rpc client config.
 	RpcClientConf struct {
 		Etcd          discov.EtcdConf `json:",optional,inherit"`
-		Endpoints     []string        `json:",optional"`
+		Endpoints     []string        `json:",optional,default=['ADMIN-CORE:8080']"`
 		Target        string          `json:",optional"`
 		App           string          `json:",optional"`
 		Token         string          `json:",optional"`
